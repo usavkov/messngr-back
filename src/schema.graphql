@@ -1,0 +1,49 @@
+type Query {
+  users: [User]
+}
+
+type User {
+  id: ID!
+  # createdAt: DateTime!
+  # updatedAt: DateTime
+  # role: Role!
+  # username: String!
+  # isDeleted: Boolean!
+  # deletedAt: DateTime
+
+  # name: String!
+  # surname: String
+  # birthday: DateTime!
+  # age: Int!
+  # email: String!
+  # phoneNumber: String!
+  # location: [Location]
+
+  # profileImage: URL
+  # gallery: [Media]
+
+  # friends: [User]
+
+  # chats: [Chat]
+}
+
+type Location {
+  country: Country!
+  city: String
+  # postCode: Int
+  # coords: 
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum Country {
+  BELARUS
+  RUSSIA
+  UKRAINE
+  POLAND
+}
+
+scalar DateTime

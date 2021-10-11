@@ -1,0 +1,21 @@
+{
+  "name": "chatAppBack",
+  "version": "1.0.0",
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "apollo-server": "^3.3.0",
+    "graphql": "^15.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13",
+    "typescript": "^4.4.3"
+  }
+}
