@@ -1,8 +1,8 @@
-const { ApolloServer } = require('apollo-server');
-const fs = require('fs');
-const path = require('path');
+import { ApolloServer } from 'apollo-server';
+import fs from 'fs';
+import path from 'path';
 
-const resolvers = require('./src/resolvers');
+import resolvers from './src/resolvers';
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
