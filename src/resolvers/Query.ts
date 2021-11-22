@@ -4,6 +4,6 @@ const users = async () => {
   }]
 };
 
-module.exports = {
+export default {
   users,
 };

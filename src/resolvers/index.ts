@@ -1,5 +1,7 @@
-const Query = require('./Query');
+import Query from './Query';
 
-module.exports = {
+const resolvers = {
   Query,
 };
+
+export default resolvers;
