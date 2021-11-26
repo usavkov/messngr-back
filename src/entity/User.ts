@@ -1,10 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
-export class User {
+import { CommonEntity } from "./utils/common";
 
-    @PrimaryGeneratedColumn()
-    id: string;
+@Entity()
+export class User extends CommonEntity {
 
     @Column({ unique: true })
     username: string;
@@ -44,15 +43,5 @@ export class User {
 
     @Column({ type: 'simple-array', default: [] })
     gallery: string[];
-
-    @Column({ type: 'simple-json' })
-    metadata: {
-        createdAt: number;
-        updatedAt: number;
-        deletedAt: number;
-        createdBy: string;
-        updatedBy: string;
-        deletedBy: string;
-    };
 
 }

@@ -1,10 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
-export class Message {
+import { CommonEntity } from "./utils/common";
 
-    @PrimaryGeneratedColumn()
-    id: string;
+@Entity()
+export class Message extends CommonEntity {
 
     @Column({ type: 'uuid' })
     from: string;
