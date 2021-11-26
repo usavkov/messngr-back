@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany } from "typeorm";
+import { User } from "./User";
 
 import { CommonEntity } from "./utils/common";
 
@@ -20,8 +21,10 @@ export class Chat extends CommonEntity {
     @Column({ type: 'simple-array' })
     moderators: string[];
 
-    @Column({ type: 'simple-array' })
-    participants: string[];
+    @ManyToMany(
+        () => User
+    )
+    participants: User[];
 
     @Column({ type: 'simple-array', default: [] })
     messages: string[];

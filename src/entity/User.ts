@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { Chat } from "./Chat";
 
 import { CommonEntity } from "./utils/common";
 
@@ -38,8 +39,22 @@ export class User extends CommonEntity {
     @Column({ type: 'simple-array', default: [] })
     friends: string[];
 
-    @Column({ type: 'simple-array', default: [] })
-    chats: string[];
+    // @Column({ type: 'simple-array', default: [] })
+    @ManyToMany(
+        () => Chat
+    )
+    @JoinTable({
+        name: 'users-chats',
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'chatId',
+            referencedColumnName: 'id',
+        }
+    })
+    chats: Chat[];
 
     @Column({ type: 'simple-array', default: [] })
     gallery: string[];
