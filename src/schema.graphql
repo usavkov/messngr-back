@@ -1,37 +1,76 @@
 type Query {
-  users: [User]
+  users: [User]!
+  login(
+    login: String!
+    password: String!
+  ): User!
+  messages(interlocutor: ID!): [Message]!
+}
+
+type Mutation {
+  signup(
+    username: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+  ): User!
+
+  sendMessage(
+    to: ID!
+    content: String!
+  ): Message!
 }
 
 type User {
   id: ID!
-  # createdAt: DateTime!
-  # updatedAt: DateTime
-  # role: Role!
-  # username: String!
-  # isDeleted: Boolean!
-  # deletedAt: DateTime
+  username: String!
+  metadata: Metadata!
+  token: String
+  role: Role!
+  isDeleted: Boolean!
+  deletedAt: DateTime
 
-  # name: String!
-  # surname: String
-  # birthday: DateTime!
-  # age: Int!
-  # email: String!
-  # phoneNumber: String!
-  # location: [Location]
+  firstName: String!
+  lastName: String
+  birthday: DateTime!
+  age: Int!
+  email: String!
+  phoneNumber: String!
+  location: [Location]
 
-  # profileImage: URL
-  # gallery: [Media]
+  profileImage: URL
+  gallery: [URL]
 
-  # friends: [User]
+  friends: [User]
 
-  # chats: [Chat]
+  chats: [Chat]
+}
+
+type Message {
+  id: ID!
+  
+  from: ID!
+  to: ID!
+
+  content: String!
+}
+
+type Chat {
+  id: ID!
+  metadata: Metadata!
+
+  participants: [User]!
+  messages: [Message]
+
+  moderators: [User]!
+  imageUrl: URL
 }
 
 type Location {
   country: Country!
   city: String
   # postCode: Int
-  # coords: 
+  # coords:
 }
 
 enum Role {
@@ -46,4 +85,10 @@ enum Country {
   POLAND
 }
 
+type Metadata {
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
 scalar DateTime
+scalar URL

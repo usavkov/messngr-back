@@ -6,7 +6,7 @@ import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
 import { flow } from 'lodash';
 
-import { authenticate } from './src/utils/middleware'
+import { authenticate } from './src/middleware'
 import resolvers from "./src/resolvers";
 
 const typeDefs = fs.readFileSync(
