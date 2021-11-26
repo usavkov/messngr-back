@@ -6,8 +6,11 @@ import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
 import { flow } from 'lodash';
 
-import { authenticate } from './src/middleware'
-import resolvers from "./src/resolvers";
+import {
+  apiRouter,
+  authenticate,
+  resolvers,
+} from "./src";
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
@@ -25,6 +28,9 @@ const startServer = async () => {
   await createConnection();
 
   const app = express();
+
+  app.use(express.json())
+  app.use(apiRouter);
 
   server.applyMiddleware({ app });
 
