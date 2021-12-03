@@ -1,10 +1,10 @@
 type Query {
-  users: [User]!
+  getAllMessages(interlocutor: ID!): [Message]!
+  getAllUsers: [User]!
   login(
     login: String!
     password: String!
   ): User!
-  messages(interlocutor: ID!): [Message]!
 }
 
 type Mutation {

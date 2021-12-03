@@ -1,9 +1,7 @@
-const users = async () => {
-  return [{
-    id: 'e.g. Id'
-  }]
-};
+import { getAllUsers } from "../components/user";
+import { getAllMessages } from "../components/message";
 
 export default {
-  users,
+  getAllMessages,
+  getAllUsers,
 };

@@ -7,7 +7,6 @@ import { ApolloServer } from "apollo-server-express";
 import { flow } from 'lodash';
 
 import {
-  apiRouter,
   authenticate,
   resolvers,
 } from "./src";
@@ -30,7 +29,6 @@ const startServer = async () => {
   const app = express();
 
   app.use(express.json())
-  app.use(apiRouter);
 
   server.applyMiddleware({ app });
 
