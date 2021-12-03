@@ -1,5 +1,5 @@
 import { User } from '../../../entity';
-// import { UserValidation } from './validation';
+import { UserValidation } from '../validation';
 
 export const getAllUsers = async (_parent, _args, { user }) => {
   try {
