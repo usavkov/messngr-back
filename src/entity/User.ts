@@ -1,5 +1,6 @@
+import * as dayjs from 'dayjs';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import { isEmail } from "class-validator";
+import { IsDataURI, isDefined, IsEmail, IsMobilePhone, Length, Min, MinDate, ValidateIf } from "class-validator";
 
 import { Chat } from "./Chat";
 
@@ -14,34 +15,46 @@ export class User extends CommonEntity {
   role: string;
 
   @Column({ unique: true })
+  @Length(3, 20)
   username: string;
 
   @Column({ nullable: true })
+  @ValidateIf(isDefined)
+  @Length(2, 64)
   firstName: string;
 
   @Column({ nullable: true })
+  @ValidateIf(isDefined)
+  @Length(2, 64)
   lastName: string;
 
   @Column({ nullable: true })
+  @ValidateIf(val => val !== undefined)
+  @Min(18)
   age: number;
 
-  @Column({ type: 'date', nullable: true }) // TODO: use as reauired
-  birthDay: number;
+  @Column({ type: 'date' })
+  @MinDate(dayjs().subtract(18, 'year').toDate())
+  birthDate: number;
 
   @Column({ unique: true })
+  @IsEmail()
   email: string;
 
+  @Column({ default: 'ru-RU' })
+  locale: string;
+
   @Column({ unique: true, nullable: true }) // TODO: use as reauired
+  // @IsMobilePhone()
   phoneNumber: number;
 
-  @Column({ default: false })
-  isDeleted: boolean;
-
   @Column({ nullable: true })
-  location: string;
-
-  @Column({ nullable: true })
+  @ValidateIf(isDefined)
+  @IsDataURI()
   profileImage: string;
+
+  @Column({ type: 'simple-array', default: [] })
+  gallery: string[];
 
   // @Column({ type: 'simple-array', default: [] })
   @ManyToMany(() => User)
@@ -72,8 +85,4 @@ export class User extends CommonEntity {
     }
   })
   chats: Chat[];
-
-  @Column({ type: 'simple-array', default: [] })
-  gallery: string[];
-
 }

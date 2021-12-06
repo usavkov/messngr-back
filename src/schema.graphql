@@ -13,6 +13,7 @@ type Mutation {
     email: String!
     password: String!
     confirmPassword: String!
+    birthDate: DateTime!
   ): User!
 
   sendMessage(
@@ -31,11 +32,11 @@ type User {
 
   firstName: String!
   lastName: String
-  birthday: DateTime!
+  birthDate: DateTime!
   age: Int!
   email: String!
   phoneNumber: String!
-  location: [Location]
+  locale: [Location]
 
   profileImage: URL
   gallery: [URL]
