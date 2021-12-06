@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
 import { Chat } from "./Chat";
 
@@ -22,6 +22,9 @@ export class Message extends CommonEntity {
     () => Chat,
     chat => chat.messages,
   )
+  @JoinColumn({
+    name: 'chat_id',
+  })
   chat: Chat;
 
 }

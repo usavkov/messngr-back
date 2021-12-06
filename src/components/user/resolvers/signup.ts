@@ -1,23 +1,17 @@
-import * as bcrypt from 'bcryptjs';
-import { omit } from 'lodash';
+import { getManager } from 'typeorm';
 
 import { User } from '../../../entity';
-// import { UserValidation } from './validation';
-
-const encryptPassword = async (user) => {
-  const password = await bcrypt.hash(user.password, 9);
-
-  return { ...omit(user, 'confirmPassword'), password };
-};
+import { encryptPassword } from '../utils';
+import { UserValidation } from '../validation';
 
 export const signup = async (_parent, args, context, info) => {
-  console.log(args);
   try {
-    // return new UserValidation(args)
-    //   .isConfirmPasswordMatches()
-    //   .completeValidation()
-    //   .then(encryptPassword)
-    //   .then((user) => User.create(user));
+    const manager = getManager();
+    const user = manager.create(User, args);
+
+    await user.save();
+
+    return user;
   } catch (errors) {
     throw errors;
   }

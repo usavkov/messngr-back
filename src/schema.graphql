@@ -24,11 +24,10 @@ type Mutation {
 type User {
   id: ID!
   username: String!
-  metadata: Metadata!
   token: String
   role: Role!
-  isDeleted: Boolean!
-  deletedAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
 
   firstName: String!
   lastName: String
@@ -48,7 +47,8 @@ type User {
 
 type Message {
   id: ID!
-  metadata: Metadata!
+  createdAt: DateTime!
+  updatedAt: DateTime!
   
   from: ID!
   to: ID!
@@ -58,7 +58,8 @@ type Message {
 
 type Chat {
   id: ID!
-  metadata: Metadata!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 
   participants: [User]!
   messages: [Message]
@@ -84,11 +85,6 @@ enum Country {
   RUSSIA
   UKRAINE
   POLAND
-}
-
-type Metadata {
-  createdAt: DateTime!
-  updatedAt: DateTime
 }
 
 scalar DateTime

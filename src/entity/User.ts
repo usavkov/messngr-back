@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
+import { isEmail } from "class-validator";
+
 import { Chat } from "./Chat";
 
 import { CommonEntity } from "./utils/common";
@@ -8,34 +10,37 @@ export class User extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column({ default: 'User' })
+  role: string;
+
   @Column({ unique: true })
   username: string;
 
-  @Column()
+  @Column({ nullable: true })
   firstName: string;
 
-  @Column()
+  @Column({ nullable: true })
   lastName: string;
 
-  @Column()
+  @Column({ nullable: true })
   age: number;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'date', nullable: true }) // TODO: use as reauired
   birthDay: number;
 
   @Column({ unique: true })
   email: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: true }) // TODO: use as reauired
   phoneNumber: number;
 
   @Column({ default: false })
   isDeleted: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   location: string;
 
-  @Column()
+  @Column({ nullable: true })
   profileImage: string;
 
   // @Column({ type: 'simple-array', default: [] })
