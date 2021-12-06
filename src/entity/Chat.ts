@@ -25,10 +25,12 @@ export class Chat extends CommonEntity {
   @Column({ type: 'simple-array' })
   moderators: string[];
 
+  // ---------
+  // Relations
+
   @ManyToMany(() => User)
   participants: User[];
 
-  // @Column({ type: 'simple-array', default: [] })
   @OneToMany(
     () => Message,
     message => message.chat

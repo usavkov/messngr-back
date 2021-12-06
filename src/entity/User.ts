@@ -1,9 +1,18 @@
 import * as dayjs from 'dayjs';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from "typeorm";
-import { IsDataURI, isDefined, IsEmail, IsMobilePhone, Length, Min, MinDate, ValidateIf } from "class-validator";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import {
+  IsDataURI,
+  isDefined,
+  IsEmail,
+  IsMobilePhone,
+  Length,
+  Min,
+  MinDate,
+  ValidateIf
+  } from 'class-validator';
 
+import { UNDER_LAW_AGE } from '../constants.ts';
 import { Chat } from "./Chat";
-
 import { CommonEntity } from "./utils/common";
 
 @Entity()
@@ -19,22 +28,33 @@ export class User extends CommonEntity {
   username: string;
 
   @Column({ nullable: true })
-  @ValidateIf(isDefined)
+  @ValidateIf(({ firstName }) => isDefined(firstName))
   @Length(2, 64)
   firstName: string;
 
   @Column({ nullable: true })
-  @ValidateIf(isDefined)
+  @ValidateIf(({ lastName }) => isDefined(lastName))
   @Length(2, 64)
   lastName: string;
 
   @Column({ nullable: true })
-  @ValidateIf(val => val !== undefined)
+  @ValidateIf(({ age }) => isDefined(age))
   @Min(18)
   age: number;
 
-  @Column({ type: 'date' })
-  @MinDate(dayjs().subtract(18, 'year').toDate())
+  // TODO: use as reauired
+  @Column({ type: 'date', nullable: true })
+  @ValidateIf(({ birthDate }) => isDefined(birthDate))
+  @MinDate(
+    dayjs().subtract(18, 'year').toDate(),
+    {
+      message: 'Too young',
+      context: {
+        code: UNDER_LAW_AGE,
+        readable: 'You must be at least $constraint1 years old, but you - $value'
+      }
+    }
+  )
   birthDate: number;
 
   @Column({ unique: true })
@@ -49,14 +69,16 @@ export class User extends CommonEntity {
   phoneNumber: number;
 
   @Column({ nullable: true })
-  @ValidateIf(isDefined)
+  @ValidateIf(({ profileImage }) => isDefined(profileImage))
   @IsDataURI()
   profileImage: string;
 
   @Column({ type: 'simple-array', default: [] })
   gallery: string[];
 
-  // @Column({ type: 'simple-array', default: [] })
+  // ---------
+  // Relations
+
   @ManyToMany(() => User)
   @JoinTable({
     name: 'users-friends',
@@ -71,7 +93,6 @@ export class User extends CommonEntity {
   })
   friends: User[];
 
-  // @Column({ type: 'simple-array', default: [] })
   @ManyToMany(() => Chat)
   @JoinTable({
     name: 'users-chats',

@@ -1,3 +1,4 @@
+import { IsDataURI, ValidateIf, isDefined } from "class-validator";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 
 import { Chat } from "./Chat";
@@ -16,7 +17,12 @@ export class Message extends CommonEntity {
   to: string;
 
   @Column()
+  @ValidateIf(({ content }) => isDefined(content))
+  @IsDataURI()
   content: string;
+
+  // ---------
+  // Relations
 
   @ManyToOne(
     () => Chat,

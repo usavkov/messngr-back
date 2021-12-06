@@ -13,7 +13,8 @@ type Mutation {
     email: String!
     password: String!
     confirmPassword: String!
-    birthDate: DateTime!
+    birthDate: DateTime
+    firstName: String
   ): User!
 
   sendMessage(
