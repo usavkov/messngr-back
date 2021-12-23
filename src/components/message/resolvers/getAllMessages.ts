@@ -1,7 +1,6 @@
 import { User, Message } from '../../../entity';
-import { UserValidation } from '../../user';
 
-export const getAllMessages = async (_parent, { interlocutor }, { user }) => {
+export const getAllMessagesResolver = async (_parent, { interlocutor }, { user }) => {
   try {
     // new UserValidation().authenticate(user.isAuthorized);
 

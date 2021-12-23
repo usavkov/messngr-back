@@ -1,6 +1,7 @@
 import * as dayjs from 'dayjs';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
 import {
+  Equals,
   IsDataURI,
   isDefined,
   IsEmail,
@@ -11,13 +12,13 @@ import {
   ValidateIf
   } from 'class-validator';
 
-import { UNDER_LAW_AGE } from '../constants.ts';
+import { UNDER_LAW_AGE } from '../constants';
 import { Chat } from "./Chat";
 import { CommonEntity } from "./utils/common";
 
 @Entity()
 export class User extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
+ @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ default: 'User' })
@@ -26,6 +27,12 @@ export class User extends CommonEntity {
   @Column({ unique: true })
   @Length(3, 20)
   username: string;
+
+  @Column({
+    select: false,
+  })
+  @Length(6, 255)
+  password: string;
 
   @Column({ nullable: true })
   @ValidateIf(({ firstName }) => isDefined(firstName))
@@ -73,7 +80,10 @@ export class User extends CommonEntity {
   @IsDataURI()
   profileImage: string;
 
-  @Column({ type: 'simple-array', default: [] })
+  @Column('text', {
+    array: true,
+    nullable: true,
+  })
   gallery: string[];
 
   // ---------
@@ -93,17 +103,9 @@ export class User extends CommonEntity {
   })
   friends: User[];
 
-  @ManyToMany(() => Chat)
-  @JoinTable({
-    name: 'users-chats',
-    joinColumn: {
-      name: 'userId',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'chatId',
-      referencedColumnName: 'id',
-    }
-  })
+  @ManyToMany(
+    () => Chat,
+    chat => chat.participants,
+  )
   chats: Chat[];
 }

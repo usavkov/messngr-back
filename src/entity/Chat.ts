@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from "typeorm";
+import { ArrayMinSize, ArrayNotEmpty, IsDataURI, isDefined, ValidateIf } from "class-validator";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from "typeorm";
 
 import { Message } from "./Message";
 import { User } from "./User";
@@ -10,25 +11,40 @@ export class Chat extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'uuid' })
-  from: string;
+  @Column({ nullable: true })
+  name: string;
 
-  @Column({ type: 'uuid' })
-  to: string;
-
-  @Column()
-  content: string;
-
-  @Column()
+  @Column({ nullable: true })
+  @ValidateIf(({ imageUrl }) => isDefined(imageUrl))
+  @IsDataURI()
   imageUrl: string;
 
-  @Column({ type: 'simple-array' })
+  @Column('uuid', {
+    nullable: true,
+    array: true,
+  })
+  @ArrayNotEmpty()
   moderators: string[];
 
   // ---------
   // Relations
 
-  @ManyToMany(() => User)
+  @ManyToMany(
+    () => User,
+    user => user.chats,
+  )
+  @JoinTable({
+    name: 'chats-users',
+    joinColumn: {
+      name: 'chatId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id'
+    },
+  })
+  @ArrayMinSize(2)
   participants: User[];
 
   @OneToMany(

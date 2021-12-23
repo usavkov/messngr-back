@@ -1,3 +1,3 @@
-export { getAllUsers } from './getAllUsers';
-export { login } from './login';
-export { signup } from './signup';
+export { getAllUsersResolver } from './getAllUsers';
+export { loginResolver } from './login';
+export { signupResolver } from './signup';

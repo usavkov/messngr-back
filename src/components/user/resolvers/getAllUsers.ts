@@ -1,14 +1,12 @@
 import { User } from '../../../entity';
-import { UserValidation } from '../validation';
 
-export const getAllUsers = async (_parent, _args, { user }) => {
+export const getAllUsersResolver = async (_parent, _args, { user }) => {
   try {
-    // new UserValidation()
-    //   .authenticate(user.isAuthorized);
+    // TODO: check permission to load all users
 
-    // const users = await User.findAll();
+    const users = await User.find()
 
-    // return users;
+    return users;
   } catch (error) {
     throw error;
   }

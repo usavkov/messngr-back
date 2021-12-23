@@ -1,6 +1,8 @@
 type Query {
   getAllMessages(interlocutor: ID!): [Message]!
   getAllUsers: [User]!
+  getDialogByUserIds: Dialog!
+  getChatById: Chat!
   login(
     login: String!
     password: String!
@@ -18,9 +20,22 @@ type Mutation {
   ): User!
 
   sendMessage(
-    to: ID!
+    type: MessageTypes!
+    chatId: String
+    to: ID
     content: String!
+    attachments: [String]
   ): Message!
+
+  createDialog(
+    interlocutorId: ID!
+  ): Dialog!
+  
+  createChat(
+    userIds: [String]!
+    name: String
+    imageUrl: String
+  ): Chat!
 }
 
 type User {
@@ -49,13 +64,25 @@ type User {
 
 type Message {
   id: ID!
+  type: MessageTypes!
   createdAt: DateTime!
   updatedAt: DateTime!
   
   from: ID!
-  to: ID!
+  to: ID
 
   content: String!
+  attachments: [String]
+}
+
+type Dialog {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  userIds: [ID]!
+  messages: [Message]
+  imageUrl: URL
 }
 
 type Chat {
@@ -63,10 +90,12 @@ type Chat {
   createdAt: DateTime!
   updatedAt: DateTime!
 
+  name: String
+
   participants: [User]!
   messages: [Message]
 
-  moderators: [User]!
+  moderators: [ID]!
   imageUrl: URL
 }
 
@@ -87,6 +116,11 @@ enum Country {
   RUSSIA
   UKRAINE
   POLAND
+}
+
+enum MessageTypes {
+  DIRECT
+  CHAT
 }
 
 scalar DateTime

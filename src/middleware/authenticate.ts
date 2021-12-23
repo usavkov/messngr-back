@@ -13,8 +13,10 @@ export function authenticate(context: any): any {
         isAuthorized: !Boolean(err),
         login: decodedToken.login,
         userId: decodedToken.userId,
+        role: decodedToken.role,
       }
-      return context;
     };
   })
+
+  return context;
 };

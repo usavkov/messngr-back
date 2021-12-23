@@ -1,31 +1,59 @@
+import { UserInputError } from 'apollo-server-express';
+import { validate } from 'class-validator';
+
 import { User, Message } from '../../../entity';
-import { UserValidation } from '../../user';
-import { MessageValidation } from '../validation';
+import { getChatById } from '../../chat';
+import {
+  createDialog,
+  findDialogByUserIds,
+} from '../../dialog';
+import { MessageTypes } from '../constants';
 
-export const sendMessage = async (_parent, { to, content }, { user }, info) => {
+export const sendMessageResolver = async (
+  _parent,
+  { type, chatId, to, content, attachments },
+  { user }
+) => {
   try {
-    // new UserValidation()
-    //   .authenticate(user.isAuthorized)
+    // TODO: add validations
+  
+    if (!(type in MessageTypes)) throw new Error(`Unkown message type - ${type}`);
 
-    // console.log(user);
+    const sender = await User.findOne({ id: user.userId });
+    const recipient = await User.findOne({ id: to });
 
-    // const recipient = await User.findOne({
-    //   where: { id: to }
-    // });
+    if (!sender || (to && !recipient)) throw new Error('User not found');
+
+    const message = Message.create({
+      type,
+      from: user.userId,
+      to,
+      content,
+      attachments,
+    });
+
+    if (type === MessageTypes.DIRECT) {
+      if (chatId) throw new Error('Direct message cannot has "chatId"');
+
+      const dialogDB = await findDialogByUserIds([to, user.userId]);
+      const dialog = dialogDB ? dialogDB : await createDialog([to, user.userId]);
+
+      message.dialog = dialog;
+    }
+
+    if (type === MessageTypes.CHAT) {
+      const chat = await getChatById(chatId);
+
+      message.chat = chat;
+    }
     
-    // const recipientValidation = new UserValidation(recipient)
-    //   .isUserExist();
+    const errors = await validate(message);
 
-    // const messageValidation = new MessageValidation()
-    //   .isEmpty(content)
+    if (errors.length) throw new UserInputError('Validation error', { errors });
 
-    // const message = Message.create({
-    //   from: user.userId,
-    //   to,
-    //   content,
-    // })
+    await message.save();
 
-    // return message;
+    return message;
   } catch (error) {
     throw error;
   }

@@ -21,7 +21,11 @@ const applyContext = (ctx) => flow(
 )(ctx);
 
 const startServer = async () => {
-  const server = new ApolloServer({ typeDefs, resolvers, context: applyContext });
+  const server = new ApolloServer({
+    context: applyContext,
+    resolvers,
+    typeDefs,
+  });
 
   await server.start();
   await createConnection();

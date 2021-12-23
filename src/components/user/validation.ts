@@ -1,51 +1,55 @@
-import bcrypt = require('bcryptjs');
-import { UserInputError, AuthenticationError } from 'apollo-server-express';
-import { isEqual, flow } from 'lodash';
+import { AuthenticationError } from 'apollo-server-errors';
+import * as bcrypt from 'bcryptjs';
+import { ValidationError, ValidationOptions } from 'class-validator';
+import { isEqual } from 'lodash';
 
+import { CONFIRM_PASSWORD_MISMATCH, WRONG_PASSWORD } from '../../constants';
 import { VALIDATION_ERRORS } from './constants';
-import { BaseValidation } from '../../utils';
 
-const { confirmPasswordMismatch, wrongCredentials, userNotFound } =
-  VALIDATION_ERRORS;
+const getValidationError = (options: ValidationOptions) => {
+  const error = new ValidationError()
 
-export class UserValidation extends BaseValidation {
-  constructor(data?) {
-    super(data)
-  }
+  return Object.entries(options).reduce((acc, [key, value]) => {
+    acc[key] = value;
 
-  // SignUp
-  isConfirmPasswordMatches() {
-    const { password, confirmPassword } = this._data;
-
-    flow(
-      isEqual,
-      this.addError({ message: confirmPasswordMismatch }),
-    )(password, confirmPassword);
-
-    return this;
-  }
-
-  // Login
-  isUserExist() {
-    flow(
-      Boolean,
-      this.throwError(new AuthenticationError(userNotFound)),
-    )(this._data);
-
-    return this;
-  }
-
-  async isPasswordCorrect(password) {
-    await bcrypt
-      .compare(password, this._data.password)
-      .then(this.throwError(new AuthenticationError(wrongCredentials)));
-    
-    return this;
-  }
-
-  authenticate(isAuthorized) {
-    this.throwError(new AuthenticationError(VALIDATION_ERRORS.unauthorized))(Boolean(isAuthorized))
-
-    return this
-  }
+    return acc;
+  }, error);
 }
+
+export const validationFlow = (...fns) => (data) => (
+  fns.reduce((acc, curr) => {
+    acc = [ ...acc, curr(data) ]
+
+    return acc;
+    }, []).filter(Boolean)
+)
+
+export const isConfirmPasswordMatches = ({ password, confirmPassword }) => (
+  isEqual(password, confirmPassword)
+    ? null
+    : getValidationError({
+        message: 'Passwords mismatch',
+        context: {
+          code: CONFIRM_PASSWORD_MISMATCH,
+          readable: 'Passwords must match'
+        }
+      })
+)
+
+export const isPasswordCorrect = async (fromInput, fromDB) => {
+  const isMatch = await bcrypt.compare(fromInput, fromDB);
+
+  return isMatch
+    ? null
+    : getValidationError({
+      message: 'Wrong password',
+      context: {
+        code: WRONG_PASSWORD,
+        readable: 'Passwords must match'
+      }
+    })
+}
+
+export const isAuthorized = ({ isAuthorized }) => {
+  if (!isAuthorized) throw new AuthenticationError(VALIDATION_ERRORS.unauthorized)
+};

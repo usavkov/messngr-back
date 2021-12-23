@@ -1,2 +1,2 @@
-export { getAllMessages } from './getAllMessages';
-export { sendMessage } from './sendMessage';
+export { getAllMessagesResolver } from './getAllMessages';
+export { sendMessageResolver } from './sendMessage';
