@@ -1,8 +1,16 @@
 type Query {
   getAllMessages(interlocutor: ID!): [Message]!
   getAllUsers: [User]!
-  getDialogByUserIds: Dialog!
-  getChatById: Chat!
+  getChatById(
+    chatId: ID!
+  ): Chat!
+  getDialogByUserIds(
+    userIds: [ID]!
+  ): Dialog!
+  getMessagesByDialogId(
+    dialogId: ID!
+  ): [Message]!
+  getUserDialogs: [Dialog]!
   login(
     login: String!
     password: String!

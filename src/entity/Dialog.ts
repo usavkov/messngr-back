@@ -11,7 +11,7 @@ export class Dialog extends CommonEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('text', { array: true })
+  @Column('uuid', { array: true })
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
   @ArrayUnique()
