@@ -10,6 +10,9 @@ type Query {
   getMessagesByDialogId(
     dialogId: ID!
   ): [Message]!
+  getUserById(
+    userId: ID!
+  ): User!
   getUserDialogs: [Dialog]!
   login(
     login: String!

@@ -11,6 +11,7 @@ import {
 } from "../components/message";
 import {
   getAllUsersResolver as getAllUsers,
+  getUserByIdResolver as getUserById,
   loginResolver as login,
 } from "../components/user";
 
@@ -20,6 +21,7 @@ export default {
   getChatById,
   getDialogByUserIds,
   getMessagesByDialogId,
+  getUserById,
   getUserDialogs,
   login,
 };

@@ -2,6 +2,7 @@ import "reflect-metadata";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as express from "express";
+import * as cors from "cors";
 import { createConnection } from "typeorm";
 import { ApolloServer } from "apollo-server-express";
 import { flow } from 'lodash';
@@ -31,7 +32,8 @@ const startServer = async () => {
   await createConnection();
 
   const app = express();
-
+  
+  app.use(cors())
   app.use(express.json())
 
   server.applyMiddleware({ app });

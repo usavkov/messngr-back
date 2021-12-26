@@ -1,7 +1,6 @@
 import * as dotenv from 'dotenv'
 import * as jwt from 'jsonwebtoken';
 import { AuthenticationError, UserInputError } from 'apollo-server-express';
-import { getManager } from 'typeorm';
 
 import { isPasswordCorrect } from '../validation';
 import { User } from '../../../entity';
@@ -14,11 +13,11 @@ export const loginResolver = async (_parent, args) => {
  
   try {
     // TODO: add validation for input
-    
-    const manager = getManager();
-    const user = await User.findOne({
-      select: ['id', 'role', 'password']
-    });
+   
+    const user = await User
+      .createQueryBuilder('user')
+      .addSelect("user.password")
+      .getOne();
 
     const isWrongCredentials = await isPasswordCorrect(password, user.password);    
 
