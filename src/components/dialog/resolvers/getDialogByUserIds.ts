@@ -1,9 +1,15 @@
 import { Dialog } from "../../../entity";
 
-export const findDialogByUserIds = async (userIds: string[]) => await Dialog
+export const findDialogByUserIds = async (userIds: string[]) => {
+  const dialog = await Dialog
   .createQueryBuilder('dialog')
-  .where('dialog.userIds @> :userIds', { userIds })
-  .getOne();
+  .leftJoinAndSelect('dialog.interlocutors', 'interlocutors')
+  .where(':userId = ANY (dialog.userIds)', { userId:userIds[0] })
+  .andWhere(':userId = ANY (dialog.userIds)', { userId:userIds[1] })
+  .getOne();  
+
+  return dialog
+}
 
 export const getDialogByUserIdsResolver = async (
   _parent,
@@ -12,7 +18,7 @@ export const getDialogByUserIdsResolver = async (
   try {
     const dialog = await findDialogByUserIds(userIds);
 
-    if (!dialog) throw new Error('Dialog is not found')
+    if (!dialog) throw new Error('Dialog not found')
 
     return dialog;
   } catch (errors) {

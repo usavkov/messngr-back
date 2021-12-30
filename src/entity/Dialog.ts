@@ -14,16 +14,28 @@ export class Dialog extends CommonEntity {
   @Column('uuid', { array: true })
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
-  @ArrayUnique()
   userIds: string[]
-
-  @Column({ nullable: true })
-  @ValidateIf(({ imageUrl }) => isDefined(imageUrl))
-  @IsDataURI()
-  imageUrl: string;
 
   // ---------
   // Relations
+  
+  @ManyToMany(
+    () => User,
+    user => user.dialogs,
+  )
+  @JoinTable({
+    name: 'dialogs-users',
+    joinColumn: {
+      name: 'dialogId',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'userId',
+      referencedColumnName: 'id'
+    },
+  })
+  @ArrayMaxSize(2)
+  interlocutors: User[];
 
   @OneToMany(
     () => Message,

@@ -12,9 +12,10 @@ import {
   ValidateIf
   } from 'class-validator';
 
-import { UNDER_LAW_AGE } from '../constants';
+  import { UNDER_LAW_AGE } from '../constants';
+  import { CommonEntity } from "./utils/common";
 import { Chat } from "./Chat";
-import { CommonEntity } from "./utils/common";
+import { Dialog } from './Dialog';
 
 @Entity()
 export class User extends CommonEntity {
@@ -102,6 +103,12 @@ export class User extends CommonEntity {
     }
   })
   friends: User[];
+
+  @ManyToMany(
+    () => Dialog,
+    dialog => dialog.interlocutors,
+  )
+  dialogs: Dialog[];
 
   @ManyToMany(
     () => Chat,

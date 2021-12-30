@@ -13,6 +13,7 @@ export function authenticate(context: any): any {
         isAuthorized: !Boolean(err),
         login: decodedToken.login,
         userId: decodedToken.userId,
+        username: decodedToken.username,
         role: decodedToken.role,
       }
     };
@@ -20,3 +21,23 @@ export function authenticate(context: any): any {
 
   return context;
 };
+
+export const authenticateWS = (token) => {
+  let user;
+
+  console.log(token);
+  
+  jwt.verify(token?.split('Bearer ')?.[1], process.env.JWT_SECRET!, (err: any, decodedToken: any) => {
+    if (decodedToken) {
+      user = {
+        isAuthorized: !Boolean(err),
+        login: decodedToken.login,
+        userId: decodedToken.userId,
+        username: decodedToken.username,
+        role: decodedToken.role,
+      }
+    };
+  })
+
+  return user;
+}

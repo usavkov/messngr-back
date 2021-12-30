@@ -15,6 +15,7 @@ export const createDialog = async (userIds) => {
 
   const dialog = Dialog.create({
     userIds,
+    interlocutors,
   });
 
   const errors = await validate(dialog);

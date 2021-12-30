@@ -48,7 +48,7 @@ export class Message extends CommonEntity {
     name: 'chatId',
   })
   @ValidateIf(({ dialog }) => !isDefined(dialog))
-  @IsNotEmpty()
+  // @IsNotEmpty()
   chat: Chat;
 
   @ManyToOne(
@@ -59,7 +59,7 @@ export class Message extends CommonEntity {
     name: 'dialogId',
   })
   @ValidateIf(({ chat }) => !isDefined(chat))
-  @IsNotEmpty()
+  // @IsNotEmpty()
   dialog: Dialog;
 
 }

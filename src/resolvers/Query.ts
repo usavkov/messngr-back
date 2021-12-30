@@ -2,6 +2,7 @@ import {
   getChatByIdResolver as getChatById,
 } from '../components/chat';
 import {
+  getDialogByIdResolver as getDialogById,
   getDialogByUserIdsResolver as getDialogByUserIds,
   getUserDialogsResolver as getUserDialogs,
 } from '../components/dialog';
@@ -19,6 +20,7 @@ export default {
   getAllMessages,
   getAllUsers,
   getChatById,
+  getDialogById,
   getDialogByUserIds,
   getMessagesByDialogId,
   getUserById,

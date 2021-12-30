@@ -16,8 +16,14 @@ export const loginResolver = async (_parent, args) => {
    
     const user = await User
       .createQueryBuilder('user')
-      .addSelect("user.password")
+      .addSelect('user.password')
+      .where(
+        'user.username = :login OR user.email = :login',
+        { login },
+      )
       .getOne();
+
+    if (!user) throw new Error('User not found')
 
     const isWrongCredentials = await isPasswordCorrect(password, user.password);    
 
@@ -28,6 +34,7 @@ export const loginResolver = async (_parent, args) => {
     const token = jwt.sign(
       {
         login,
+        username: user.username,
         role: user.role,
         userId: user.id,
       }, 
@@ -38,7 +45,7 @@ export const loginResolver = async (_parent, args) => {
     );
 
 
-    return { ...user, token };
+    return token;
   } catch (errors) {
     throw errors;
   }
