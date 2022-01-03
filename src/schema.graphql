@@ -1,41 +1,61 @@
 type Query {
-  getAllMessages(interlocutor: ID!): [Message]!
+  getAllMessages(
+    interlocutor: ID!
+  ): [Message]!
+
   getAllUsers: [User]!
+
   getChatById(
     chatId: ID!
   ): Chat!
+
   getDialogById(
     dialogId: ID!
   ): Dialog!
+
   getDialogByUserIds(
     userIds: [ID]!
   ): Dialog!
+
   getMessagesByDialogId(
     dialogId: ID!
   ): [Message]!
+
   getUserById(
     userId: ID!
   ): User!
+
   getUserDialogs: [Dialog]!
+
   login(
     login: String!
     password: String!
   ): String!
+
   searchUsers(
     search: String! 
   ): [User]
 }
 
 type Mutation {
-  signup(
-    username: String!
-    email: String!
-    password: String!
-    confirmPassword: String!
-    birthDate: DateTime
-    firstName: String
-  ): User!
+  addContact(
+    userId: ID!
+  ): User
 
+  createChat(
+    userIds: [String]!
+    name: String
+    imageUrl: String
+  ): Chat!
+
+  createDialog(
+    interlocutorId: ID!
+  ): Dialog!
+
+  removeContact(
+    userId: ID!
+  ): User
+  
   sendMessage(
     type: MessageTypes!
     chatId: ID
@@ -45,15 +65,14 @@ type Mutation {
     attachments: [String]
   ): Message!
 
-  createDialog(
-    interlocutorId: ID!
-  ): Dialog!
-  
-  createChat(
-    userIds: [String]!
-    name: String
-    imageUrl: String
-  ): Chat!
+  signup(
+    username: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+    birthDate: DateTime
+    firstName: String
+  ): User!
 }
 
 type Subscription {

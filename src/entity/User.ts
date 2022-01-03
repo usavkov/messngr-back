@@ -90,7 +90,10 @@ export class User extends CommonEntity {
   // ---------
   // Relations
 
-  @ManyToMany(() => User)
+  @ManyToMany(
+    () => User,
+    { cascade: true }
+  )
   @JoinTable({
     name: 'users-contacts',
     joinColumn: {
