@@ -21,6 +21,9 @@ type Query {
     login: String!
     password: String!
   ): String!
+  searchUsers(
+    search: String! 
+  ): [User]
 }
 
 type Mutation {

@@ -92,17 +92,17 @@ export class User extends CommonEntity {
 
   @ManyToMany(() => User)
   @JoinTable({
-    name: 'users-friends',
+    name: 'users-contacts',
     joinColumn: {
       name: 'userId',
       referencedColumnName: 'id'
     },
     inverseJoinColumn: {
-      name: 'friendId',
+      name: 'contactId',
       referencedColumnName: 'id',
     }
   })
-  friends: User[];
+  contacts: User[];
 
   @ManyToMany(
     () => Dialog,

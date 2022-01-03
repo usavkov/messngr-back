@@ -14,6 +14,8 @@ import {
   getAllUsersResolver as getAllUsers,
   getUserByIdResolver as getUserById,
   loginResolver as login,
+  searchUsersResolver as searchUsers,
+  
 } from "../components/user";
 
 export default {
@@ -26,4 +28,5 @@ export default {
   getUserById,
   getUserDialogs,
   login,
+  searchUsers,
 };
