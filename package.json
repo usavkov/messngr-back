@@ -8,8 +8,14 @@
       "@types/jsonwebtoken": "^8.5.6",
       "@types/lodash": "^4.14.177",
       "@types/node": "^8.0.29",
+      "eslint": "^8.6.0",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-plugin-prettier": "^4.0.0",
+      "husky": "^7.0.4",
+      "lint-staged": "^12.1.5",
       "lodash": "^4.17.21",
       "nodemon": "^2.0.15",
+      "prettier": "^2.5.1",
       "ts-node": "^10.4.0",
       "typescript": "^4.4.3"
    },
@@ -37,6 +43,18 @@
    },
    "scripts": {
       "start": "nodemon --exec ts-node app.ts",
-      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
-   }
+      "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+      "precommit": "lint-staged",
+      "lint": "node_modules/.bin/eslint --debug src/",
+      "lint:write": "node_modules/.bin/eslint --debug src/ --fix",
+      "prettier": "prettier --write src/**/*.ts"
+   },
+   "husky": {
+      "hooks": {
+        "pre-commit": "lint-staged"
+      }
+    },
+    "lint-staged": {
+      "*.ts": ["yarn run lint:write", "git add"]
+    }
 }
