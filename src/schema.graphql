@@ -1,37 +1,162 @@
 type Query {
-  users: [User]
+  getAllMessages(
+    interlocutor: ID!
+  ): [Message]!
+
+  getAllUsers: [User]!
+
+  getChatById(
+    chatId: ID!
+  ): Chat!
+
+  getDialogById(
+    dialogId: ID!
+  ): Dialog!
+
+  getDialogByUserIds(
+    userIds: [ID]!
+  ): Dialog!
+
+  getMessagesByDialogId(
+    dialogId: ID!
+  ): [Message]!
+
+  getUserById(
+    userId: ID!
+  ): User!
+
+  getUserDialogs: [Dialog]!
+
+  login(
+    login: String!
+    password: String!
+  ): String!
+
+  searchUsers(
+    search: String! 
+  ): [User]
+}
+
+type Mutation {
+  addContact(
+    userId: ID!
+  ): User
+
+  createChat(
+    userIds: [String]!
+    name: String
+    imageUrl: String
+  ): Chat!
+
+  createDialog(
+    interlocutorId: ID!
+  ): Dialog!
+
+  deleteContact(
+    userId: ID!
+  ): User
+
+  deleteMessage(
+    messageId: ID!
+  ): Message
+  
+  sendMessage(
+    type: MessageTypes!
+    chatId: ID
+    dialogId: ID
+    to: ID
+    content: String!
+    attachments: [String]
+  ): Message!
+
+  signup(
+    username: String!
+    email: String!
+    password: String!
+    confirmPassword: String!
+    birthDate: DateTime
+    firstName: String
+  ): User!
+}
+
+type Subscription {
+  messageSent: Message!
+
+  messageDeleted: Message!
+
+  contactAdded: User!
+
+  contactDeleted: User!
 }
 
 type User {
   id: ID!
-  # createdAt: DateTime!
-  # updatedAt: DateTime
-  # role: Role!
-  # username: String!
-  # isDeleted: Boolean!
-  # deletedAt: DateTime
+  username: String!
+  token: String
+  role: Role!
+  createdAt: DateTime!
+  updatedAt: DateTime!
 
-  # name: String!
-  # surname: String
-  # birthday: DateTime!
-  # age: Int!
-  # email: String!
-  # phoneNumber: String!
-  # location: [Location]
+  firstName: String
+  lastName: String
+  birthDate: DateTime!
+  age: Int!
+  email: String!
+  phoneNumber: String!
+  locale: [Location]
 
-  # profileImage: URL
-  # gallery: [Media]
+  profileImage: URL
+  gallery: [URL]
 
-  # friends: [User]
+  friends: [User]
 
-  # chats: [Chat]
+  chats: [Chat]
+}
+
+type Message {
+  id: ID!
+  type: MessageTypes!
+  dialogId: ID
+  chatId: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  from: ID!
+  to: ID
+
+  content: String!
+  attachments: [String]
+}
+
+type Dialog {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  userIds: [ID]!
+  interlocutors: [User]!
+  messages: [Message]
+}
+
+type Chat {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  name: String
+
+  participants: [User]!
+  messages: [Message]
+
+  moderators: [ID]!
+  imageUrl: URL
 }
 
 type Location {
   country: Country!
   city: String
   # postCode: Int
-  # coords: 
+  # coords:
 }
 
 enum Role {
@@ -46,4 +171,10 @@ enum Country {
   POLAND
 }
 
+enum MessageTypes {
+  DIRECT
+  CHAT
+}
+
 scalar DateTime
+scalar URL
