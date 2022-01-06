@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "prettier"
+  ],
+  "rules": {
+    
+  },
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "import",
+    "prettier",
+    "@typescript-eslint"
+  ]
+}
