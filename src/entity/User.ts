@@ -1,5 +1,11 @@
 import * as dayjs from 'dayjs';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import {
   Equals,
   IsDataURI,
@@ -9,17 +15,17 @@ import {
   Length,
   Min,
   MinDate,
-  ValidateIf
-  } from 'class-validator';
+  ValidateIf,
+} from 'class-validator';
 
-  import { UNDER_LAW_AGE } from '../constants';
-  import { CommonEntity } from "./utils/common";
-import { Chat } from "./Chat";
+import { UNDER_LAW_AGE } from '../constants';
+import { CommonEntity } from './utils/common';
+import { Chat } from './Chat';
 import { Dialog } from './Dialog';
 
 @Entity()
 export class User extends CommonEntity {
- @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ default: 'User' })
@@ -53,16 +59,13 @@ export class User extends CommonEntity {
   // TODO: use as reauired
   @Column({ type: 'date', nullable: true })
   @ValidateIf(({ birthDate }) => isDefined(birthDate))
-  @MinDate(
-    dayjs().subtract(18, 'year').toDate(),
-    {
-      message: 'Too young',
-      context: {
-        code: UNDER_LAW_AGE,
-        readable: 'You must be at least $constraint1 years old, but you - $value'
-      }
-    }
-  )
+  @MinDate(dayjs().subtract(18, 'year').toDate(), {
+    message: 'Too young',
+    context: {
+      code: UNDER_LAW_AGE,
+      readable: 'You must be at least $constraint1 years old, but you - $value',
+    },
+  })
   birthDate: number;
 
   @Column({ unique: true })
@@ -90,32 +93,23 @@ export class User extends CommonEntity {
   // ---------
   // Relations
 
-  @ManyToMany(
-    () => User,
-    { cascade: true }
-  )
+  @ManyToMany(() => User, { cascade: true })
   @JoinTable({
     name: 'users-contacts',
     joinColumn: {
       name: 'userId',
-      referencedColumnName: 'id'
+      referencedColumnName: 'id',
     },
     inverseJoinColumn: {
       name: 'contactId',
       referencedColumnName: 'id',
-    }
+    },
   })
   contacts: User[];
 
-  @ManyToMany(
-    () => Dialog,
-    dialog => dialog.interlocutors,
-  )
+  @ManyToMany(() => Dialog, (dialog) => dialog.interlocutors)
   dialogs: Dialog[];
 
-  @ManyToMany(
-    () => Chat,
-    chat => chat.participants,
-  )
+  @ManyToMany(() => Chat, (chat) => chat.participants)
   chats: Chat[];
 }

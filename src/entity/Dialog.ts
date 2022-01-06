@@ -1,10 +1,25 @@
-import { ArrayMaxSize, ArrayMinSize, ArrayNotEmpty, ArrayUnique, IsDataURI, isDefined, ValidateIf } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from "typeorm";
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  ArrayNotEmpty,
+  ArrayUnique,
+  IsDataURI,
+  isDefined,
+  ValidateIf,
+} from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  OneToMany,
+  JoinTable,
+} from 'typeorm';
 
-import { Message } from "./Message";
-import { User } from "./User";
+import { Message } from './Message';
+import { User } from './User';
 
-import { CommonEntity } from "./utils/common";
+import { CommonEntity } from './utils/common';
 
 @Entity()
 export class Dialog extends CommonEntity {
@@ -14,15 +29,12 @@ export class Dialog extends CommonEntity {
   @Column('uuid', { array: true })
   @ArrayMinSize(2)
   @ArrayMaxSize(2)
-  userIds: string[]
+  userIds: string[];
 
   // ---------
   // Relations
-  
-  @ManyToMany(
-    () => User,
-    user => user.dialogs,
-  )
+
+  @ManyToMany(() => User, (user) => user.dialogs)
   @JoinTable({
     name: 'dialogs-users',
     joinColumn: {
@@ -31,16 +43,12 @@ export class Dialog extends CommonEntity {
     },
     inverseJoinColumn: {
       name: 'userId',
-      referencedColumnName: 'id'
+      referencedColumnName: 'id',
     },
   })
   @ArrayMaxSize(2)
   interlocutors: User[];
 
-  @OneToMany(
-    () => Message,
-    message => message.dialog
-  )
+  @OneToMany(() => Message, (message) => message.dialog)
   messages: Message[];
-
 }

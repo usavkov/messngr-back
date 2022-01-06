@@ -1,11 +1,23 @@
-import { IsDataURI, ValidateIf, isDefined, MaxLength, IsNotEmpty } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
-import { MessageTypes } from "../components/message/constants";
+import {
+  IsDataURI,
+  ValidateIf,
+  isDefined,
+  MaxLength,
+  IsNotEmpty,
+} from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { MessageTypes } from '../components/message/constants';
 
-import { Chat } from "./Chat";
-import { Dialog } from "./Dialog";
+import { Chat } from './Chat';
+import { Dialog } from './Dialog';
 
-import { CommonEntity } from "./utils/common";
+import { CommonEntity } from './utils/common';
 
 @Entity()
 export class Message extends CommonEntity {
@@ -40,10 +52,7 @@ export class Message extends CommonEntity {
   // ---------
   // Relations
 
-  @ManyToOne(
-    () => Chat,
-    chat => chat.messages,
-  )
+  @ManyToOne(() => Chat, (chat) => chat.messages)
   @JoinColumn({
     name: 'chatId',
   })
@@ -51,15 +60,11 @@ export class Message extends CommonEntity {
   // @IsNotEmpty()
   chat: Chat;
 
-  @ManyToOne(
-    () => Dialog,
-    dialog => dialog.messages,
-  )
+  @ManyToOne(() => Dialog, (dialog) => dialog.messages)
   @JoinColumn({
     name: 'dialogId',
   })
   @ValidateIf(({ chat }) => !isDefined(chat))
   // @IsNotEmpty()
   dialog: Dialog;
-
 }

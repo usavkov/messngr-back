@@ -4,12 +4,17 @@ import { getManager } from 'typeorm';
 
 import { Chat, User } from '../../../entity';
 
-export const createChatResolver = async (_parent, { userIds, imageUrl }, { user }, info) => {
+export const createChatResolver = async (
+  _parent,
+  { userIds, imageUrl },
+  { user },
+  info
+) => {
   try {
     // TODO: add validation
-    
+
     const participants = await User.findByIds([...userIds, user.userId]);
-  
+
     const chat = Chat.create({
       participants,
       moderators: [user?.userId],
@@ -18,7 +23,7 @@ export const createChatResolver = async (_parent, { userIds, imageUrl }, { user 
 
     const errors = await validate(chat);
 
-    if(errors.length) throw new UserInputError('Validation error', { errors });
+    if (errors.length) throw new UserInputError('Validation error', { errors });
 
     await chat.save();
 

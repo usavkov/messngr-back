@@ -1,6 +1,4 @@
-import {
-  getChatByIdResolver as getChatById,
-} from '../components/chat';
+import { getChatByIdResolver as getChatById } from '../components/chat';
 import {
   getDialogByIdResolver as getDialogById,
   getDialogByUserIdsResolver as getDialogByUserIds,
@@ -9,14 +7,13 @@ import {
 import {
   getAllMessagesResolver as getAllMessages,
   getMessagesByDialogIdResolver as getMessagesByDialogId,
-} from "../components/message";
+} from '../components/message';
 import {
   getAllUsersResolver as getAllUsers,
   getUserByIdResolver as getUserById,
   loginResolver as login,
   searchUsersResolver as searchUsers,
-  
-} from "../components/user";
+} from '../components/user';
 
 export default {
   getAllMessages,

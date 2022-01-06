@@ -5,7 +5,7 @@ const VALIDATION_ERRORS = {
   emptyField: 'Cannot be empty',
 };
 
-type ValidationData = any; 
+type ValidationData = any;
 
 export class BaseValidation {
   protected _data: ValidationData;
@@ -18,9 +18,7 @@ export class BaseValidation {
   isEmpty(data: any, error?: any): any {
     flow(
       Boolean,
-      this.throwError(
-        error || new UserInputError(VALIDATION_ERRORS.emptyField),
-      ),
+      this.throwError(error || new UserInputError(VALIDATION_ERRORS.emptyField))
     )(data.length);
 
     return this;
@@ -35,7 +33,7 @@ export class BaseValidation {
   }
 
   throwError(
-    error = new UserInputError('Validation error', { errors: this.errors }),
+    error = new UserInputError('Validation error', { errors: this.errors })
   ) {
     return (isValid) => {
       if (!isValid) throw error;

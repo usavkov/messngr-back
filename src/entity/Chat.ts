@@ -1,10 +1,23 @@
-import { ArrayMinSize, ArrayNotEmpty, IsDataURI, isDefined, ValidateIf } from "class-validator";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from "typeorm";
+import {
+  ArrayMinSize,
+  ArrayNotEmpty,
+  IsDataURI,
+  isDefined,
+  ValidateIf,
+} from 'class-validator';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  OneToMany,
+  JoinTable,
+} from 'typeorm';
 
-import { Message } from "./Message";
-import { User } from "./User";
+import { Message } from './Message';
+import { User } from './User';
 
-import { CommonEntity } from "./utils/common";
+import { CommonEntity } from './utils/common';
 
 @Entity()
 export class Chat extends CommonEntity {
@@ -29,10 +42,7 @@ export class Chat extends CommonEntity {
   // ---------
   // Relations
 
-  @ManyToMany(
-    () => User,
-    user => user.chats,
-  )
+  @ManyToMany(() => User, (user) => user.chats)
   @JoinTable({
     name: 'chats-users',
     joinColumn: {
@@ -41,16 +51,12 @@ export class Chat extends CommonEntity {
     },
     inverseJoinColumn: {
       name: 'userId',
-      referencedColumnName: 'id'
+      referencedColumnName: 'id',
     },
   })
   @ArrayMinSize(2)
   participants: User[];
 
-  @OneToMany(
-    () => Message,
-    message => message.chat
-  )
+  @OneToMany(() => Message, (message) => message.chat)
   messages: Message[];
-
 }

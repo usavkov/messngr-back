@@ -1,4 +1,4 @@
-import { Chat } from "../../../entity";
+import { Chat } from '../../../entity';
 
 export const getChatById = async (chatId) => {
   // TODO: add validation
@@ -8,7 +8,7 @@ export const getChatById = async (chatId) => {
   if (!chat) throw new Error('Chat is not found');
 
   return chat;
-}
+};
 
 export const getChatByIdResolver = async (_parent, { chatId }) => {
   try {
@@ -20,4 +20,4 @@ export const getChatByIdResolver = async (_parent, { chatId }) => {
   } catch (errors) {
     throw errors;
   }
-}
+};

@@ -7,6 +7,6 @@ import { BaseValidation } from '../../utils';
 
 export class MessageValidation extends BaseValidation {
   constructor(data?) {
-    super(data)
+    super(data);
   }
 }

@@ -1,16 +1,16 @@
-import { createChatResolver as createChat } from "../components/chat";
-import { createDialogResolver as createDialog } from "../components/dialog";
+import { createChatResolver as createChat } from '../components/chat';
+import { createDialogResolver as createDialog } from '../components/dialog';
 import {
   sendMessageResolver,
   deleteMessageResolver,
-} from "../components/message";
+} from '../components/message';
 import {
   addContactResolver as addContact,
   removeContactResolver as removeContact,
   signupResolver as signup,
-} from "../components/user";
+} from '../components/user';
 
-export default function(pubsub) {
+export default function (pubsub) {
   return {
     addContact,
     createChat,
@@ -19,5 +19,5 @@ export default function(pubsub) {
     removeContact,
     sendMessage: sendMessageResolver(pubsub),
     signup,
-  }
-};
+  };
+}

@@ -1,11 +1,11 @@
 import {
   messageDeletedResolver,
   messageSentResolver,
-} from "../components/message";
+} from '../components/message';
 
 export default function (pubsub) {
   return {
     messageDeleted: messageDeletedResolver(pubsub),
     messageSent: messageSentResolver(pubsub),
-  }
-};
+  };
+}
