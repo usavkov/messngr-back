@@ -52,7 +52,7 @@ type Mutation {
     interlocutorId: ID!
   ): Dialog!
 
-  removeContact(
+  deleteContact(
     userId: ID!
   ): User
 
@@ -83,6 +83,10 @@ type Subscription {
   messageSent: Message!
 
   messageDeleted: Message!
+
+  contactAdded: User!
+
+  contactDeleted: User!
 }
 
 type User {

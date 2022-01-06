@@ -5,18 +5,18 @@ import {
   deleteMessageResolver,
 } from '../components/message';
 import {
-  addContactResolver as addContact,
-  removeContactResolver as removeContact,
+  addContactResolver,
+  deleteContactResolver,
   signupResolver as signup,
 } from '../components/user';
 
 export default function (pubsub) {
   return {
-    addContact,
+    addContact: addContactResolver(pubsub),
     createChat,
     createDialog,
     deleteMessage: deleteMessageResolver(pubsub),
-    removeContact,
+    deleteContact: deleteContactResolver(pubsub),
     sendMessage: sendMessageResolver(pubsub),
     signup,
   };

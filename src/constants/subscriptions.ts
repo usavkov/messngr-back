@@ -1,2 +1,5 @@
 export const MESSAGE_SENT = 'MESSAGE_SENT';
 export const MESSAGE_DELETED = 'MESSAGE_DELETED';
+
+export const CONTACT_ADDED = 'CONTACT_ADDED';
+export const CONTACT_DELETED = 'CONTACT_DELETED';

@@ -1,7 +1,7 @@
-import { CONTACT_ADDED } from '../../../constants';
+import { CONTACT_DELETED } from '../../../constants';
 import { User } from '../../../entity';
 
-export const addContactResolver = (pubsub: any) => async (_parent, { userId }, { user }) => {
+export const deleteContactResolver = (pubsub) => async (_parent, { userId }, { user }) => {
   try {
     // TODO: add validation
     const contact = await User.findOne(userId);
@@ -9,12 +9,11 @@ export const addContactResolver = (pubsub: any) => async (_parent, { userId }, {
     await User.createQueryBuilder()
       .relation('contacts')
       .of(user?.userId)
-      .add(userId);
+      .remove(userId);
 
-
-    pubsub.publish(CONTACT_ADDED, {
-      contactAdded: contact
-    })
+    pubsub.publish(CONTACT_DELETED, {
+      contactDeleted: contact
+    });
 
     return contact;
   } catch (error) {
