@@ -11,7 +11,7 @@
       "eslint": "^8.6.0",
       "eslint-config-prettier": "^8.3.0",
       "eslint-plugin-prettier": "^4.0.0",
-      "husky": "^7.0.4",
+      "husky": "4",
       "lint-staged": "^12.1.5",
       "lodash": "^4.17.21",
       "nodemon": "^2.0.15",
@@ -51,10 +51,12 @@
    },
    "husky": {
       "hooks": {
-        "pre-commit": "lint-staged"
+         "pre-commit": "lint-staged"
       }
-    },
-    "lint-staged": {
-      "*.ts": ["yarn run lint:write", "git add"]
-    }
+   },
+   "lint-staged": {
+      "*.ts": [
+         "yarn run lint:write"
+      ]
+   }
 }
