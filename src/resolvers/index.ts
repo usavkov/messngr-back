@@ -6,12 +6,10 @@ import Subscription from './Subscription';
 import Query from './Query';
 
 const options = {
-  host: process.env.REDIS_HOST || '127.0.0.1',
+  host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT) : 6379,
-  retryStrategy: (times) => {
-    // reconnect after
-    return Math.min(times * 50, 2000);
-  },
+  password: process.env.REDIS_PASSWORD || null,
+  retryStrategy: (times) => Math.min(times * 50, 2000),
 };
 
 const pubsub = new RedisPubSub({

@@ -1,3 +1,5 @@
+import { cloneDeep } from 'lodash';
+
 import { MESSAGE_DELETED } from '../../../constants';
 import { Message } from '../../../entity';
 
@@ -6,26 +8,22 @@ export const deleteMessageResolver =
   async (_parent, { messageId }, { user }) => {
     try {
       // TODO: add validation
-      const message = await Message.findOne(messageId);
+      const message = await Message.findOne(messageId, {
+        relations: ['dialog', 'chat'],
+      });
 
       if (!message) throw new Error('Message not found');
+
+      const messageDeleted = cloneDeep(message);
 
       await Message.createQueryBuilder()
         .delete()
         .where('id = :messageId', { messageId })
         .execute();
 
-      pubsub.publish(MESSAGE_DELETED, {
-        messageDeleted: {
-          ...message,
-          dialogId: message.dialog?.id,
-          chatId: message.chat?.id,
-        },
-      });
+      pubsub.publish(MESSAGE_DELETED, { messageDeleted });
 
-      return {
-        id: messageId,
-      };
+      return messageDeleted;
     } catch (error) {
       throw error;
     }

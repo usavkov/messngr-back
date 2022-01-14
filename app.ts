@@ -1,8 +1,9 @@
 import "reflect-metadata";
+import * as cors from "cors";
+import * as dotenv from "dotenv";
+import * as express from "express";
 import * as fs from 'fs';
 import * as path from 'path';
-import * as express from "express";
-import * as cors from "cors";
 import { createServer } from 'http';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
@@ -16,6 +17,8 @@ import {
   authenticateWS,
   resolvers,
 } from "./src";
+
+dotenv.config();
 
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
@@ -68,14 +71,14 @@ const startServer = async () => {
 
       return params;
     },
- }, {
+  }, {
     server: httpServer,
     path: server.graphqlPath,
- });
+  });
 
-  httpServer.listen({ port: 4000 }, () =>
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`)
-  );
+  httpServer.listen({ port: 4000 }, () => {
+    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  });
 };
 
 startServer();
