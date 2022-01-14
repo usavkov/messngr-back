@@ -116,8 +116,8 @@ type User {
 type Message {
   id: ID!
   type: MessageTypes!
-  dialogId: ID
-  chatId: ID
+  dialog: Dialog
+  chat: Chat
   createdAt: DateTime!
   updatedAt: DateTime!
   

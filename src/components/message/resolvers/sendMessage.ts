@@ -57,19 +57,9 @@ export const sendMessageResolver =
         throw new UserInputError('Validation error', { errors });
 
       await message.save();
-      pubsub.publish(MESSAGE_SENT, {
-        messageSent: {
-          ...message,
-          dialogId: message.dialog?.id,
-          chatId: message.chat?.id,
-        },
-      });
+      pubsub.publish(MESSAGE_SENT, { messageSent: message });
 
-      return {
-        ...message,
-        dialogId: message.dialog?.id,
-        chatId: message.chat?.id,
-      };
+      return message;
     } catch (error) {
       throw error;
     }
