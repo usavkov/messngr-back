@@ -20,6 +20,8 @@ import {
 
 dotenv.config();
 
+const PORT = process.env.PORT || 4000;
+
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
   'utf8',
@@ -76,8 +78,8 @@ const startServer = async () => {
     path: server.graphqlPath,
   });
 
-  httpServer.listen({ port: 4000 }, () => {
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
   });
 };
 
