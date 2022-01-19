@@ -5,6 +5,7 @@ import * as express from "express";
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServer } from 'http';
+import { createServer as createSecureServer } from 'https';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -26,6 +27,11 @@ const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
   'utf8',
 );
+
+const credentials = {
+  key: fs.readFileSync('ssl/server.key', 'utf8'),
+  cert: fs.readFileSync('ssl/server.crt', 'utf8'),
+}
 
 const applyContext = (ctx) => flow(
   authenticate,
@@ -59,7 +65,12 @@ const startServer = async () => {
   await createConnection();
   server.applyMiddleware({ app });
 
-  const httpServer = createServer(app);
+  // const httpServer = process.env.NODE_ENV === 'production'
+  //   ? createSecureServer(credentials, app)
+  //   : createServer(app);
+
+  const httpServer = createSecureServer(credentials, app);
+
   const subscriptionServer = SubscriptionServer.create({
     schema,
     execute,
@@ -81,7 +92,7 @@ const startServer = async () => {
   });
 
   httpServer.listen(PORT, () => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`);
+    console.log(`🚀 Server ready at :${PORT} port (${process.env.NODE_ENV || 'dev'})`);
   });
 };
 
