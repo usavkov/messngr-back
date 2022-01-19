@@ -36,7 +36,9 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 const startServer = async () => {
   const app = express();
 
-  app.use(cors());
+  app.use(cors({
+    credentials: true,
+  }));
   app.use(express.json());
 
   const server = new ApolloServer({
