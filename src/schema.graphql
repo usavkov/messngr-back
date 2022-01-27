@@ -32,6 +32,10 @@ type Query {
     password: String!
   ): String!
 
+  searchDialogs(
+    search: String! 
+  ): [Dialog]
+
   searchUsers(
     search: String! 
   ): [User]

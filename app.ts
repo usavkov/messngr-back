@@ -69,7 +69,7 @@ const startServer = async () => {
   //   ? createSecureServer(credentials, app)
   //   : createServer(app);
 
-  const httpServer = createSecureServer(credentials, app);
+  const httpServer = createServer(app);
 
   const subscriptionServer = SubscriptionServer.create({
     schema,

@@ -3,6 +3,7 @@ import {
   getDialogByIdResolver as getDialogById,
   getDialogByUserIdsResolver as getDialogByUserIds,
   getUserDialogsResolver as getUserDialogs,
+  searchDialogsResolver as searchDialogs,
 } from '../components/dialog';
 import {
   getAllMessagesResolver as getAllMessages,
@@ -25,5 +26,6 @@ export default {
   getUserById,
   getUserDialogs,
   login,
+  searchDialogs,
   searchUsers,
 };
