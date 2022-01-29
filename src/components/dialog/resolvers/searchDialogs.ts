@@ -1,10 +1,18 @@
 import { Any, Brackets, Raw } from 'typeorm';
 
+import { DEFAULT_LIMIT } from '../../../constants';
 import { Dialog } from '../../../entity';
 
 const SAVED_MESSAGES = 'saved';
 
-export const searchDialogsResolver = async (_parent, { search }, { user }) => {
+export const searchDialogsResolver = async (
+  _parent,
+  {
+    search,
+    limit = DEFAULT_LIMIT,
+    offset = 0,
+  },
+  { user }) => {
   try {
     // TODO: add validation; support filters
 
@@ -33,13 +41,15 @@ export const searchDialogsResolver = async (_parent, { search }, { user }) => {
             new Brackets((qb) => {
               qb.where('LOWER(interlocutors.username) like :searchValue', { searchValue })
                 .orWhere('LOWER(interlocutors.firstName) like :searchValue', { searchValue })
-                .orWhere('LOWER(interlocutors.firstName) like :searchValue', { searchValue })
+                .orWhere('LOWER(interlocutors.lastName) like :searchValue', { searchValue })
                 .orWhere(`'${SAVED_MESSAGES}' like :searchValue`, { searchValue });
             }))
       }))
       .orderBy({
         'message.updatedAt': 'DESC',
       })
+      .offset(offset)
+      .limit(limit)
       .getMany();
 
     return dialogs;

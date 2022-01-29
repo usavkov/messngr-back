@@ -1,7 +1,14 @@
+import { DEFAULT_LIMIT } from '../../../constants';
 import { Message } from '../../../entity';
 import { MessageTypes } from '../constants';
 
-export const findMessagesByDialogId = async (dialogId) => {
+export const findMessagesByDialogId = async (
+  dialogId,
+  {
+    limit = DEFAULT_LIMIT,
+    offset = 0,
+  } = {},
+) => {
   const messages = await Message.createQueryBuilder('message')
     .leftJoinAndSelect('message.dialog', 'dialog')
     .where('dialog.id = :dialogId', { dialogId })
@@ -9,6 +16,8 @@ export const findMessagesByDialogId = async (dialogId) => {
     .orderBy({
       'message.createdAt': 'DESC',
     })
+    .offset(offset)
+    .limit(limit)
     .getMany();
 
   return messages;
@@ -16,11 +25,18 @@ export const findMessagesByDialogId = async (dialogId) => {
 
 export const getMessagesByDialogIdResolver = async (
   _parent,
-  { dialogId },
+  {
+    dialogId,
+    limit,
+    offset,
+  },
   { user }
 ) => {
   try {
-    const messages = await findMessagesByDialogId(dialogId);
+    const messages = await findMessagesByDialogId(dialogId, {
+      limit,
+      offset,
+    });
 
     return messages || [];
   } catch (error) {

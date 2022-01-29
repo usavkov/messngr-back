@@ -1,8 +1,17 @@
 import { Brackets } from 'typeorm';
 
+import { DEFAULT_LIMIT } from '../../../constants';
 import { User } from '../../../entity';
 
-export const searchUsersResolver = async (_parent, { search }, { user }) => {
+export const searchUsersResolver = async (
+  _parent,
+  {
+    search,
+    limit = DEFAULT_LIMIT,
+    offset = 0,
+  },
+  { user },
+) => {
   try {
     // TODO: add validation; support filters
 
@@ -17,6 +26,8 @@ export const searchUsersResolver = async (_parent, { search }, { user }) => {
             .orWhere('LOWER(user.lastName) like :searchValue', { searchValue });
         })
       )
+      .offset(offset)
+      .limit(limit)
       .getMany();
 
     return users;

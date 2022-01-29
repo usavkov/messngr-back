@@ -1,6 +1,5 @@
 import { UserInputError } from 'apollo-server-express';
 import { validate } from 'class-validator';
-import { getManager } from 'typeorm';
 
 import { Chat, User } from '../../../entity';
 
