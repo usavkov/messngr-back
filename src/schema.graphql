@@ -19,21 +19,34 @@ type Query {
 
   getMessagesByDialogId(
     dialogId: ID!
+    offset: Int
+    limit: Int
   ): [Message]!
 
   getUserById(
     userId: ID!
   ): User!
 
-  getUserDialogs: [Dialog]!
+  getUserDialogs(
+    offset: Int
+    limit: Int
+  ): [Dialog]!
 
   login(
     login: String!
     password: String!
   ): String!
 
+  searchDialogs(
+    search: String!
+    offset: Int
+    limit: Int
+  ): [Dialog]
+
   searchUsers(
-    search: String! 
+    search: String!
+    offset: Int
+    limit: Int
   ): [User]
 }
 

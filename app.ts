@@ -5,6 +5,7 @@ import * as express from "express";
 import * as fs from 'fs';
 import * as path from 'path';
 import { createServer } from 'http';
+import { createServer as createSecureServer } from 'https';
 import { execute, subscribe } from 'graphql';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { makeExecutableSchema } from '@graphql-tools/schema';
@@ -20,10 +21,17 @@ import {
 
 dotenv.config();
 
+const PORT = process.env.PORT || 4000;
+
 const typeDefs = fs.readFileSync(
   path.join(__dirname, 'src/schema.graphql'),
   'utf8',
 );
+
+const credentials = {
+  key: fs.readFileSync('ssl/server.key', 'utf8'),
+  cert: fs.readFileSync('ssl/server.crt', 'utf8'),
+}
 
 const applyContext = (ctx) => flow(
   authenticate,
@@ -34,7 +42,9 @@ const schema = makeExecutableSchema({ typeDefs, resolvers });
 const startServer = async () => {
   const app = express();
 
-  app.use(cors());
+  app.use(cors({
+    credentials: true,
+  }));
   app.use(express.json());
 
   const server = new ApolloServer({
@@ -55,7 +65,12 @@ const startServer = async () => {
   await createConnection();
   server.applyMiddleware({ app });
 
+  // const httpServer = process.env.NODE_ENV === 'production'
+  //   ? createSecureServer(credentials, app)
+  //   : createServer(app);
+
   const httpServer = createServer(app);
+
   const subscriptionServer = SubscriptionServer.create({
     schema,
     execute,
@@ -76,8 +91,8 @@ const startServer = async () => {
     path: server.graphqlPath,
   });
 
-  httpServer.listen({ port: 4000 }, () => {
-    console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 Server ready at :${PORT} port (${process.env.NODE_ENV || 'dev'})`);
   });
 };
 

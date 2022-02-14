@@ -1,7 +1,6 @@
 import * as R from 'ramda';
 import { UserInputError } from 'apollo-server-express';
 import { validate } from 'class-validator';
-import { flow, isEqual } from 'lodash';
 import { getManager } from 'typeorm';
 
 import { User } from '../../../entity';
